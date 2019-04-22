@@ -15,3 +15,12 @@ install_dependencies:
   artifacts:
     paths:
       - node_modules/
+
+testing:
+  stage: test
+  script:
+    - npm start
+  artifacts:
+    paths:
+      - node_modules/
+    
