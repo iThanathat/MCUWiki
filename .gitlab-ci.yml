@@ -1,26 +1,32 @@
 image: node:latest
 
 stages:
+  - install
   - build
-  - test
 
 cache:
   paths:
     - node_modules/
 
-install_dependencies:
-  stage: build
+install:
+  stage: install
+  only:
+    - master
   script:
     - npm install
   artifacts:
     paths:
       - node_modules/
 
-testing:
-  stage: test
+build:
+  stage: build
+  only:
+    - master
+  dependencies:
+    - install
   script:
-    - npm start
+    - npm run build
   artifacts:
     paths:
-      - node_modules/
+      - build
     
