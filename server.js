@@ -28,7 +28,7 @@ app.post('/webhook', line.middleware(config), (req, res) => {
     });
 })
 
-app.listen(port)
+app.listen(process.env.PORT || port)
 
 module.exports = app;
 
