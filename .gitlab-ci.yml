@@ -1,32 +1,16 @@
 image: node:latest
 
 stages:
-  - install
-  - build
-
-cache:
-  paths:
-    - node_modules/
-
-install:
-  stage: install
+  - production
+  
+production:
+  type: deploy
+  stage: production
+  image: ruby:latest
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=node-heroku-dpl --api-key=$HEROKU_API_KEY
   only:
     - master
-  script:
-    - npm install
-  artifacts:
-    paths:
-      - node_modules/
-
-build:
-  stage: build
-  only:
-    - master
-  dependencies:
-    - install
-  script:
-    - npm run build
-  artifacts:
-    paths:
-      - build
-    
