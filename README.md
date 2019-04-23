@@ -17,3 +17,10 @@ npm start
 - Go to Line Developer.
 - Change Webhook URL to your url.(In this case we use url generate from Ngrok for test.)
 - Now you can start use MCUWiki bot.
+
+### Reference
+
+```
+LINE Bot 101 — จับมือทำบอท
+https://medium.com/linedevth/line-bot-101-447e427d62c7
+```
