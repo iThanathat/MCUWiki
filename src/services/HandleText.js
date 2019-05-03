@@ -12,10 +12,10 @@ module.exports = function (client, message, replyToken){
 
 function setReplyTextFomat(textMsgs) {
     textMsgs = Array.isArray(textMsgs) ? textMsgs : [textMsgs];
-    return textMsgs.map((text) => ({type: 'text', text: getCharaterInfo(text)}));
+    return textMsgs.map((text) => ({type: 'text', text: getCharacterInfo(text)}));
 }
 
-function getCharaterInfo(textMsgs) {
+function getCharacterInfo(textMsgs) {
   let character = characterInfo.find(characterData => {
     if (compareStringIgnoreCase(characterData.Name, textMsgs)) {
       return characterData;
