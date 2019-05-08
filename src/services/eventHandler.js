@@ -1,5 +1,5 @@
 const handleMessage = require('./MessageHandler.js')
-const handleFollow = require('./FollowHander.js')
+const handleFollow = require('./FollowHandler.js')
 
 module.exports = function (client, event) {
   switch (event.type) {
@@ -7,7 +7,7 @@ module.exports = function (client, event) {
       const message = event.message;
       return handleMessage(client, event.replyToken, message)
     case 'follow':
-      return handleFollow(client, event.replyToken, 'Got followed event');
+      return handleFollow(client, event);
     case 'unfollow':
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
     case 'join':
