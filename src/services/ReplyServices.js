@@ -1,31 +1,28 @@
-const replyService = (client, token, type , msgs) => {
-  if (msgs !== undefined) {
-    return replyMsg(client, token, msgs);
-  } else {
-    return defaultReply(client, token, type);
-  }
-};
+const characterInfomations = require('../mockdb/characterDb.js').CharacterInfomations
+const MESSAGE = require('./ConstantVariables').MESSAGE
 
-function replyMsg(client, token, msgs) {
-  return client.replyMessage(token, msgs);
-}
-
-function defaultReply(client, token, type) {
-  let defaultMsg = [{
-    'type': 'text',
-    'text': type + ' isn\'t support in this chatbot.'
-    },
-    {
-      'type': 'sticker',
-      'packageId': '11537',
-      'stickerId': '52002770'
-    },
-    {
-      'type': 'text',
-      'text': 'Please try another message.'
+function getCharacterInformation (textMessage) {
+    let character = characterInfomations.find(characterData => {
+        return compareStringIgnoreCase(characterData.Name, textMessage)
+    });
+    if (character instanceof Object) {
+        return character.Name + '\n' + character.Type + '\n' + character.Info
     }
-  ]
-  return client.replyMessage(token, defaultMsg);
+    return MESSAGE.NOT_FOUND_CHARACTER_MESSAGE
 }
 
-module.exports = replyService;
+function compareStringIgnoreCase(string1, string2) {
+    let isEqual = false
+    if (string1.toLowerCase() == string2.toLowerCase()) {
+        console.log("Equal")
+        isEqual = true
+    }
+    return isEqual
+}
+
+function replyMessage(client, replyToken, message) {
+    return client.replyMessage(replyToken, message)
+}
+
+module.exports.replyMessage = replyMessage
+module.exports.getCharacterInformation = getCharacterInformation
