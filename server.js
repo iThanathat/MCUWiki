@@ -1,7 +1,7 @@
 var express = require('express')
 var line = require('@line/bot-sdk')
 var config = require('./config/config.json')
-var eventHandler = require('./src/services/eventHandler')
+var eventHandler = require('./src/services/EventHandler')
 var app = express();
 
 const client = new line.Client(config)
