@@ -94,7 +94,8 @@ function handleText(textMessages, client, event) {
                 storage.setItem(`${event.source.userId}`, JSON.stringify(event))
                 return {
                     type : 'text', 
-                    text : `คุณเลือกตัวละคร ${text.trim()} กรุณาเลือกว่าคุณอยากทราบข้อมูลอะไร \n 1.ประวัติ \n 2.ภาพยนตร์ที่ปรากฎตัว \n 3.ชื่อนักแสดง \n 4.ยกเลิกตัวละครนี้`
+                    text : `คุณเลือกตัวละคร ${text.trim()} กรุณาเลือกว่าคุณอยากทราบข้อมูลอะไร \n 1.ประวัติ \n 2.ภาพยนตร์ที่ปรากฎตัว \n 3.ชื่อนักแสดง \n 4.ยกเลิกตัวละครนี้
+                    \nหรือคุณสามารถเลือกกดจาก \nrich menu ที่ชื่อ MUC Choice ได้\nปล. MCU Choice จะหายไปเมื่อกดยกเลิกตัวละครนี้`.trim()
                 }
             } else {
                 return {
