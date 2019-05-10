@@ -14,7 +14,7 @@ module.exports = function handleMessage(client, replyToken, message, event) {
     let messageType = isUnsuportedMessageType ? 'unsupported' : message.type
     switch (messageType) {
         case 'text':
-            return replyServices.replyMessage(client, replyToken, handleText(message.text, event))
+            return replyServices.replyMessage(client, replyToken, handleText(message.text, client, event))
         case 'sticker':
             return replyServices.replyMessage(client, replyToken, handleSticker())
         case 'unsupported':
@@ -24,10 +24,11 @@ module.exports = function handleMessage(client, replyToken, message, event) {
     }
 }
 
-function handleText(textMessages, event) {
+function handleText(textMessages, client, event) {
     textMessages = Array.isArray(textMessages) ? textMessages: [textMessages]
     let userEvent = storage.getItem(`${event.source.userId}`)
     let character = userEvent ? JSON.parse(userEvent).message.text : null
+    const homeRichMenuId = 'richmenu-2a777e6392acf7362be0822428c50d3f'
     const HERO_INFO = '1'
     const PLAY_IN = '2'
     const CASTING = '3'
@@ -70,6 +71,9 @@ function handleText(textMessages, event) {
                     ]
                 case CANCEL:
                     storage.removeItem(`${event.source.userId}`)
+                    client.unlinkRichMenuFromUser(event.source.userId).catch(error => {
+                        console.error(err);
+                    })
                     return {
                         type : 'text', 
                         text : `ขอบคุณที่ใช้บริการ MCUWikiจ้า`
@@ -84,10 +88,14 @@ function handleText(textMessages, event) {
     } else {
         return textMessages.map(text => {
             if(replyServices.getCharacterInformation(text.trim()) !== MESSAGE.NOT_FOUND_CHARACTER_MESSAGE ) {
+                client.linkRichMenuToUser(event.source.userId, homeRichMenuId).catch(error => {
+                    console.error(err);
+                })
                 storage.setItem(`${event.source.userId}`, JSON.stringify(event))
                 return {
                     type : 'text', 
-                    text : `คุณเลือกตัวละคร ${text.trim()} กรุณาเลือกว่าคุณอยากทราบข้อมูลอะไร \n 1.ประวัติ \n 2.ภาพยนตร์ที่ปรากฎตัว \n 3.ชื่อนักแสดง \n 4.ยกเลิกตัวละครนี้`
+                    text : `คุณเลือกตัวละคร ${text.trim()} กรุณาเลือกว่าคุณอยากทราบข้อมูลอะไร \n 1.ประวัติ \n 2.ภาพยนตร์ที่ปรากฎตัว \n 3.ชื่อนักแสดง \n 4.ยกเลิกตัวละครนี้
+                    \nหรือคุณสามารถเลือกกดจาก \nrich menu ที่ชื่อ MCU Choice ได้\nปล. MCU Choice จะหายไปเมื่อกดยกเลิกตัวละครนี้`.trim()
                 }
             } else {
                 return {
