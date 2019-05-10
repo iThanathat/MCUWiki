@@ -27,10 +27,7 @@ module.exports = function handleMessage(client, replyToken, message, event) {
 function handleText(textMessages, event) {
     textMessages = Array.isArray(textMessages) ? textMessages: [textMessages]
     let userEvent = storage.getItem(`${event.source.userId}`)
-    let character = null
-    if(userEvent){
-        character = JSON.parse(userEvent).message.text
-    }
+    let character = userEvent ? JSON.parse(userEvent).message.text : null
     if(character) {
         return textMessages.map(text => {
             storage.removeItem(`${event.source.userId}`)
