@@ -1,5 +1,5 @@
-const MESSAGE = require('./ConstantVariables.js').MESSAGE
-const replyServices = require('./ReplyServices.js')
+const MESSAGE = require('./ConstantVariables').MESSAGE
+const replyServices = require('./ReplyServices')
 
 
 module.exports = function handleGroup(client, event) {

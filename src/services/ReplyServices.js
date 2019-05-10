@@ -1,4 +1,4 @@
-const characterInfomations = require('../mockdb/characterDb.js').CharacterInfomations
+const characterInfomations = require('../mockdb/characterDb').CharacterInfomations
 const MESSAGE = require('./ConstantVariables').MESSAGE
 
 function getCharacterInformation (textMessage) {
