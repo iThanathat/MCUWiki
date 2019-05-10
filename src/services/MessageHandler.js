@@ -28,12 +28,57 @@ function handleText(textMessages, event) {
     textMessages = Array.isArray(textMessages) ? textMessages: [textMessages]
     let userEvent = storage.getItem(`${event.source.userId}`)
     let character = userEvent ? JSON.parse(userEvent).message.text : null
+    const HERO_INFO = '1'
+    const PLAY_IN = '2'
+    const CASTING = '3'
+    const CANCEL = '4'
     if(character) {
         return textMessages.map(text => {
-            storage.removeItem(`${event.source.userId}`)
-            return {
-                type : 'text', 
-                text : replyServices.getCharacterInformation(character)
+            switch(text) {
+                case HERO_INFO:
+                    return [
+                        {
+                            type : 'text',
+                            text : replyServices.getCharacterInformation(character),
+                        },
+                        {
+                            type: 'text',
+                            text: `อยากรู้อะไรเพิ่มเติมเกี่ยวกับ ${character} กดเลขต่อได้เลย หรือ กด 4 เพื่อยกเลิกตัวละครนี้`
+                        }
+                    ]
+                case PLAY_IN:
+                    return [
+                        {
+                            type : 'text',
+                            text : replyServices.getAppearMovies(character),
+                        },
+                        {
+                            type: 'text',
+                            text: `อยากรู้อะไรเพิ่มเติมเกี่ยวกับ ${character} กดเลขต่อได้เลย หรือ กด 4 เพื่อยกเลิกตัวละครนี้`
+                        }
+                    ]
+                case CASTING:
+                    return [
+                        {
+                            type : 'text',
+                            text : replyServices.getCharacterCasting(character),
+                        },
+                        {
+                            type: 'text',
+                            text: `อยากรู้อะไรเพิ่มเติมเกี่ยวกับ ${character} กดเลขต่อได้เลย หรือ กด 4 เพื่อยกเลิกตัวละครนี้`
+                        }
+                    ]
+                case CANCEL:
+                    storage.removeItem(`${event.source.userId}`)
+                    return {
+                        type : 'text', 
+                        text : `ขอบคุณที่ใช้บริการ MCUWikiจ้า`
+                    }
+                default:
+                    return {
+                        type : 'text', 
+                        text : 'กรุณาพิมพ์เลขที่ระบุไว้เท่านั้น'
+                    }
             }
         })
     } else {
@@ -42,7 +87,7 @@ function handleText(textMessages, event) {
                 storage.setItem(`${event.source.userId}`, JSON.stringify(event))
                 return {
                     type : 'text', 
-                    text : `คุณเลือกตัวละคร ${text.trim()} กรุณาเลือกว่าคุณอยากทราบข้อมูลอะไร \n 1.ประวัติ \n 2.จำนวนภาพยนตร์ที่แสดง`
+                    text : `คุณเลือกตัวละคร ${text.trim()} กรุณาเลือกว่าคุณอยากทราบข้อมูลอะไร \n 1.ประวัติ \n 2.ภาพยนตร์ที่ปรากฎตัว \n 3.ชื่อนักแสดง \n 4.ยกเลิกตัวละครนี้`
                 }
             } else {
                 return {

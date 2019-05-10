@@ -7,13 +7,13 @@ module.exports = function handleFollow(client, event) {
         let followMessage =[
             {
                 type : 'text',
-                text : `Hello, ${userName}. Thank you for being friends with MCUWiki.`
+                text : `สวัสดีคุณ, ${userName}. ขอบคุณที่เพิ่มMCUWikiเป็นเพื่อน!.`
             },
             {
                 type : 'text',
                 text : MESSAGE.HOW_TO_USE_MESSAGE
             }
         ]
-        return replyServices.replyMessage(client, event.replyToken, followMessage)
+        return replyServices.replyGreetingMessage(client, event.replyToken, followMessage)
     })
 }
