@@ -6,7 +6,7 @@ function getCharacterInformation (textMessage) {
         return compareStringIgnoreCase(characterData.Name, textMessage)
     });
     if (character instanceof Object) {
-        return character.Name + '\n' + character.Type + '\n' + character.Info
+        return character.Name + '\n' + character.Info + '\n' + character.Casting + '\n' + character.Movie
     }
     return MESSAGE.NOT_FOUND_CHARACTER_MESSAGE
 }
