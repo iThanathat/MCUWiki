@@ -1,5 +1,5 @@
-const handleMessage = require('./MessageHandler.js')
-const handleFollow = require('./FollowHandler.js')
+const handleMessage = require('./MessageHandler')
+const handleFollow = require('./FollowHandler')
 const handleGroup = require('./GroupHandler')
 
 module.exports = function (client, event) {
