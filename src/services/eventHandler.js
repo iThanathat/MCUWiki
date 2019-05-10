@@ -5,7 +5,7 @@ module.exports = function (client, event) {
   switch (event.type) {
     case 'message':
       const message = event.message;
-      return handleMessage(client, event.replyToken, message)
+      return handleMessage(client, event.replyToken, message, event)
     case 'follow':
       return handleFollow(client, event);
     case 'unfollow':

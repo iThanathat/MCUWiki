@@ -14,7 +14,6 @@ function getCharacterInformation (textMessage) {
 function compareStringIgnoreCase(string1, string2) {
     let isEqual = false
     if (string1.toLowerCase() == string2.toLowerCase()) {
-        console.log("Equal")
         isEqual = true
     }
     return isEqual

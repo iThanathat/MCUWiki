@@ -1,18 +1,20 @@
 const constantVariable = require('./ConstantVariables')
 const replyServices = require('./ReplyServices')
+var LocalStorage = require('node-localstorage').LocalStorage,
+storage = new LocalStorage('./LocalStorage');
 const MESSAGE = constantVariable.MESSAGE
 const STICKER = constantVariable.STICKER_PACKAGE
 const MIN_STICKER = constantVariable.MIN_STICKER_ID
 const MAX_STICKER = constantVariable.MAX_STICKER_ID
 
-module.exports = function handleMessage(client, replyToken, message) {
+module.exports = function handleMessage(client, replyToken, message, event) {
     let isUnsuportedMessageType = MESSAGE.MESSAGE_TYPES.some(type => {
         return (message.type == type && (message.type != 'text' && message.type != 'sticker'))
     })
     let messageType = isUnsuportedMessageType ? 'unsupported' : message.type
     switch (messageType) {
         case 'text':
-            return replyServices.replyMessage(client, replyToken, handleText(message.text))
+            return replyServices.replyMessage(client, replyToken, handleText(message.text, event))
         case 'sticker':
             return replyServices.replyMessage(client, replyToken, handleSticker())
         case 'unsupported':
@@ -22,13 +24,35 @@ module.exports = function handleMessage(client, replyToken, message) {
     }
 }
 
-function handleText(textMessages) {
+function handleText(textMessages, event) {
     textMessages = Array.isArray(textMessages) ? textMessages: [textMessages]
-    return textMessages.map((textMessage) => ({
-            type : 'text', 
-            text : replyServices.getCharacterInformation(textMessage.trim())
-        }
-    ))
+    let userEvent = storage.getItem(`${event.source.userId}`)
+    let character = userEvent ? JSON.parse(userEvent).message.text : null
+    if(character) {
+        return textMessages.map(text => {
+            storage.removeItem(`${event.source.userId}`)
+            return {
+                type : 'text', 
+                text : replyServices.getCharacterInformation(character)
+            }
+        })
+    } else {
+        return textMessages.map(text => {
+            if(replyServices.getCharacterInformation(text.trim()) !== MESSAGE.NOT_FOUND_CHARACTER_MESSAGE ) {
+                storage.setItem(`${event.source.userId}`, JSON.stringify(event))
+                return {
+                    type : 'text', 
+                    text : `คุณเลือกตัวละคร ${text.trim()} กรุณาเลือกว่าคุณอยากทราบข้อมูลอะไร \n 1.ประวัติ \n 2.จำนวนภาพยนตร์ที่แสดง`
+                }
+            } else {
+                return {
+                    type: 'text',
+                    text: MESSAGE.NOT_FOUND_CHARACTER_MESSAGE
+                }
+            }
+        })
+    }
+
 }
 
 function handleSticker() {
